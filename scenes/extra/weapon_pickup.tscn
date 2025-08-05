@@ -1,0 +1,162 @@
+[gd_scene load_steps=10 format=3 uid="uid://dj2ajvc7fm4wh"]
+
+[ext_resource type="Script" uid="uid://dq0nill32upgo" path="res://scenes/extra/weapon_pickup.gd" id="1_845jb"]
+[ext_resource type="Texture2D" uid="uid://k1o2nroluihr" path="res://Topdown Assets/Sprites/Weapons/weapon_1_pistol.png" id="1_yfdqa"]
+[ext_resource type="Texture2D" uid="uid://b0d6xe0sreis5" path="res://Topdown Assets/Sprites/Shadow.png" id="2_336h7"]
+[ext_resource type="Texture2D" uid="uid://d0ioacy2yuqsg" path="res://Topdown Assets/Sprites/tile_coin.png" id="3_845jb"]
+[ext_resource type="LabelSettings" uid="uid://dgxgtfpm2g8fg" path="res://label_96.tres" id="4_3xvxu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jden5"]
+size = Vector2(577.143, 837.144)
+
+[sub_resource type="Animation" id="Animation_la4t8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Shadow:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_prfhr"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -100), Vector2(0, 40), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.8, 1.3), Vector2(0.8, 1.3), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Shadow:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.4, 0.4), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_n80o4"]
+_data = {
+&"RESET": SubResource("Animation_la4t8"),
+&"idle": SubResource("Animation_prfhr")
+}
+
+[node name="WeaponPickup" type="Area2D"]
+scale = Vector2(0.35, 0.35)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_845jb")
+
+[node name="WeaponSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_yfdqa")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.431373)
+position = Vector2(0, 525.714)
+texture = ExtResource("2_336h7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-11.4286, 258.571)
+scale = Vector2(0.999999, 0.999999)
+shape = SubResource("RectangleShape2D_jden5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_n80o4")
+}
+autoplay = "idle"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(350, 180)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = 650.0
+offset_right = 175.0
+offset_bottom = 830.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("3_845jb")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="PriceLabel" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "50	"
+label_settings = ExtResource("4_3xvxu")
+
+[node name="BuyLabel" type="Label" parent="."]
+visible = false
+offset_left = -174.286
+offset_top = -308.571
+offset_right = 156.714
+offset_bottom = -192.571
+text = "Buy 'E'	"
+label_settings = ExtResource("4_3xvxu")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

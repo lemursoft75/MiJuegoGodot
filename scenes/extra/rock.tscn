@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://eijvyu5ah2ae"]
+
+[ext_resource type="Texture2D" uid="uid://bxi0odh2ho0fg" path="res://Topdown Assets/Sprites/Environment/rock1.png" id="1_x73a0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x73a0"]
+radius = 111.0
+height = 358.0
+
+[node name="Rock" type="StaticBody2D"]
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_x73a0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_x73a0")

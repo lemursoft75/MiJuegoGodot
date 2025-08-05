@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://dgxgtfpm2g8fg"]
+
+[ext_resource type="FontFile" uid="uid://bgagfu5e1ecxd" path="res://Topdown Assets/Fonts/Bake Soda.otf" id="1_ahnjq"]
+
+[resource]
+font = ExtResource("1_ahnjq")
+font_size = 96

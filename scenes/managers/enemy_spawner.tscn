@@ -1,0 +1,18 @@
+[gd_scene load_steps=6 format=3 uid="uid://b6bl8yc41r7al"]
+
+[ext_resource type="Script" uid="uid://dgnjju2kg8y3l" path="res://scenes/managers/enemy_spawner.gd" id="1_f03ed"]
+[ext_resource type="PackedScene" uid="uid://boep7clmuxle3" path="res://scenes/enemy/enemy_1.tscn" id="2_3ttk1"]
+[ext_resource type="PackedScene" uid="uid://bqsw2s1l1tcxc" path="res://scenes/enemy/enemy_2.tscn" id="3_wnpmh"]
+[ext_resource type="PackedScene" uid="uid://xldntutpcpa3" path="res://scenes/enemy/enemy_3.tscn" id="4_bmr3w"]
+[ext_resource type="PackedScene" uid="uid://bx1tonem56quy" path="res://scenes/enemy/enemy_4.tscn" id="5_gg3rj"]
+
+[node name="EnemySpawner" type="Node"]
+script = ExtResource("1_f03ed")
+min_random = 1.0
+max_random = 2.5
+fixed_timer = 1.5
+enemy_list = Array[PackedScene]([ExtResource("2_3ttk1"), ExtResource("3_wnpmh"), ExtResource("4_bmr3w"), ExtResource("5_gg3rj")])
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

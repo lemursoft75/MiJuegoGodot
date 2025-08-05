@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://bregmxiachqw"]
+
+[ext_resource type="Texture2D" uid="uid://b0d6xe0sreis5" path="res://Topdown Assets/Sprites/Shadow.png" id="1_avkp6"]
+[ext_resource type="Script" uid="uid://bkd2wqptudx8h" path="res://scenes/extra/spawn_anim.gd" id="2_eg6n5"]
+
+[sub_resource type="Animation" id="Animation_vkqf7"]
+resource_name = "spawn"
+length = 0.8
+loop_mode = 2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8001, 0.8002, 0.8003, 0.8004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.25, 0.25), Vector2(0.35, 0.35), Vector2(0.25, 0.25), Vector2(0.35, 0.35), Vector2(0.25, 0.25), Vector2(0.25, 0.25), Vector2(0.25, 0.25), Vector2(0.25, 0.25)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"spawn_enemy"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_5udjo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.25, 0.25)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8ob00"]
+_data = {
+&"RESET": SubResource("Animation_5udjo"),
+&"spawn": SubResource("Animation_vkqf7")
+}
+
+[node name="SpawnAnim" type="Sprite2D"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_avkp6")
+script = ExtResource("2_eg6n5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_8ob00")
+}
+autoplay = "spawn"

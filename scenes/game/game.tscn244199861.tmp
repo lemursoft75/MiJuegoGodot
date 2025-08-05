@@ -1,0 +1,189 @@
+[gd_scene load_steps=17 format=3 uid="uid://d1ppiavx3s8us"]
+
+[ext_resource type="PackedScene" uid="uid://b5lw0ejedrvs5" path="res://scenes/player/player.tscn" id="1_sul5r"]
+[ext_resource type="Script" uid="uid://biosuhwy3qsvb" path="res://scenes/game/game.gd" id="2_0sr1o"]
+[ext_resource type="Texture2D" uid="uid://ubm1eqcoxtwx" path="res://Topdown Assets/Sprites/Environment/ground2_white.png" id="2_kelw5"]
+[ext_resource type="Texture2D" uid="uid://drpmj5jkfv8o7" path="res://Topdown Assets/Sprites/Extras/crosshair.png" id="3_kelw5"]
+[ext_resource type="AudioStream" uid="uid://c3h5mideq18id" path="res://Topdown Assets/Sound/music.mp3" id="5_lfrn8"]
+[ext_resource type="PackedScene" uid="uid://dj2ajvc7fm4wh" path="res://scenes/extra/weapon_pickup.tscn" id="6_5jirj"]
+[ext_resource type="Resource" uid="uid://diogmadlur77i" path="res://data/weapon_pistol_1.tres" id="7_vaxfo"]
+[ext_resource type="Resource" uid="uid://bpdbpexkuse7a" path="res://data/weapon_pistol_2.tres" id="8_ftsea"]
+[ext_resource type="Resource" uid="uid://cn7e6qesjgjhu" path="res://data/weapon_m4_1.tres" id="9_otnwt"]
+[ext_resource type="Resource" uid="uid://b65vlwdgkq3sh" path="res://data/weapon_m4_2.tres" id="10_3xj4h"]
+[ext_resource type="Resource" uid="uid://b08yu3hmdo60u" path="res://data/weapon_shotgun_1.tres" id="11_5v6r0"]
+[ext_resource type="Resource" uid="uid://byl22y2xkb6qu" path="res://data/weapon_shotgun_2.tres" id="12_uyinl"]
+[ext_resource type="PackedScene" uid="uid://eijvyu5ah2ae" path="res://scenes/extra/rock.tscn" id="13_vaxfo"]
+[ext_resource type="PackedScene" uid="uid://mev63v6sr3ae" path="res://scenes/enemy/enemy_1.tscn" id="14_ftsea"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfrn8"]
+size = Vector2(6144, 40)
+
+[sub_resource type="GDScript" id="GDScript_1vugn"]
+script/source = "extends CharacterBody2D
+class_name Enemy
+
+@export var move_speed := 400.0
+
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var health_bar: HealthBar = $HealthBar
+
+var can_move := true
+
+func _process(delta: float) -> void:
+	var player_dir := GameManager.player.global_position - global_position
+	var direction := player_dir.normalized()
+	var movement = direction * move_speed
+	velocity = movement
+	
+	if not can_move:
+		return
+	
+	if player_dir.length() <= 150:
+		return
+	
+	move_and_slide()
+	animated_sprite_2d.flip_h = true if velocity.x < 0 else false
+
+
+func _on_health_component_on_damaged() -> void:
+	var health_value = health_component.current_health / health_component.max_health
+	health_bar.set_value(health_value)
+	animated_sprite_2d.material = GameManager.HIT_MATERIAL
+	await get_tree().create_timer(0.3).timeout
+	animated_sprite_2d.material = null
+
+
+func _on_health_component_on_defeated() -> void:
+	can_move = false
+	health_bar.hide()
+	animated_sprite_2d.play(\"dead\")
+	collision_shape_2d.set_deferred(\"disabled\", true)
+	
+	await animated_sprite_2d.animation_finished
+	GameManager.on_enemy_died.emit()
+	GameManager.create_coin(global_position)
+	queue_free()
+
+
+func _on_hit_area_2d_body_entered(player: Player) -> void:
+	player.health_component.take_damage(2)
+	GameManager.play_damage_text(player.global_position, 2)
+"
+
+[node name="Game" type="Node2D"]
+script = ExtResource("2_0sr1o")
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.584314, 0.560784, 0.764706, 1)
+scale = Vector2(3, 3)
+texture = ExtResource("2_kelw5")
+
+[node name="Player" parent="." instance=ExtResource("1_sul5r")]
+position = Vector2(919, 551)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.65, 0.65)
+limit_left = -3072
+limit_top = -3072
+limit_right = 3072
+limit_bottom = 3072
+
+[node name="Crosshair" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(1212, 401)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_kelw5")
+
+[node name="Colliders" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Colliders"]
+position = Vector2(3, 3092)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Colliders/StaticBody2D"]
+shape = SubResource("RectangleShape2D_lfrn8")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Colliders"]
+position = Vector2(6, -3093)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Colliders/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_lfrn8")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Colliders"]
+position = Vector2(-3091, 25)
+rotation = 1.5708
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Colliders/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_lfrn8")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Colliders"]
+position = Vector2(3092, -26)
+rotation = 1.5708
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Colliders/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_lfrn8")
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_lfrn8")
+autoplay = true
+
+[node name="Weapons" type="Node2D" parent="."]
+position = Vector2(-747, 0)
+
+[node name="WeaponPickup" parent="Weapons" instance=ExtResource("6_5jirj")]
+weapon_data = ExtResource("7_vaxfo")
+
+[node name="WeaponPickup6" parent="Weapons" instance=ExtResource("6_5jirj")]
+position = Vector2(300, 0)
+weapon_data = ExtResource("8_ftsea")
+
+[node name="WeaponPickup5" parent="Weapons" instance=ExtResource("6_5jirj")]
+position = Vector2(600, 0)
+weapon_data = ExtResource("9_otnwt")
+
+[node name="WeaponPickup4" parent="Weapons" instance=ExtResource("6_5jirj")]
+position = Vector2(900, 0)
+weapon_data = ExtResource("10_3xj4h")
+
+[node name="WeaponPickup3" parent="Weapons" instance=ExtResource("6_5jirj")]
+position = Vector2(1200, 0)
+weapon_data = ExtResource("11_5v6r0")
+
+[node name="WeaponPickup2" parent="Weapons" instance=ExtResource("6_5jirj")]
+position = Vector2(1500, 0)
+weapon_data = ExtResource("12_uyinl")
+
+[node name="Rocks" type="Node2D" parent="."]
+
+[node name="Rock" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(-1828, -1383)
+
+[node name="Rock2" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(-1961, 223)
+
+[node name="Rock3" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(-1583, 1903)
+
+[node name="Rock4" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(476, 2091)
+
+[node name="Rock5" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(2502, 1332)
+
+[node name="Rock6" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(2691, 303)
+
+[node name="Rock7" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(2534, -478)
+
+[node name="Rock8" parent="Rocks" instance=ExtResource("13_vaxfo")]
+position = Vector2(-1004, -487)
+
+[node name="Enemy_1" parent="." instance=ExtResource("14_ftsea")]
+position = Vector2(-1118, 553)
+script = SubResource("GDScript_1vugn")

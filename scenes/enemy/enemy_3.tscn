@@ -1,0 +1,83 @@
+[gd_scene load_steps=14 format=3 uid="uid://xldntutpcpa3"]
+
+[ext_resource type="PackedScene" uid="uid://iftu5au0m845" path="res://scenes/enemy/base_enemy.tscn" id="1_irhgu"]
+[ext_resource type="Texture2D" uid="uid://b84ywbjrox8jm" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_0.png" id="2_d405r"]
+[ext_resource type="Texture2D" uid="uid://c0wwc6ukoe6ca" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_1.png" id="3_44gae"]
+[ext_resource type="Texture2D" uid="uid://ttwsgmsodoav" path="res://Topdown Assets/Sprites/Dead anim/death_0.png" id="3_oqadk"]
+[ext_resource type="Texture2D" uid="uid://dd0aq5umrxj22" path="res://Topdown Assets/Sprites/Dead anim/death_1.png" id="4_mibo2"]
+[ext_resource type="Texture2D" uid="uid://0854frjae20" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_2.png" id="4_wwu2i"]
+[ext_resource type="Texture2D" uid="uid://bugmww0gwh2js" path="res://Topdown Assets/Sprites/Dead anim/death_2.png" id="5_m2om0"]
+[ext_resource type="Texture2D" uid="uid://dteqeyh64480n" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_3.png" id="5_y5qon"]
+[ext_resource type="Texture2D" uid="uid://bk5kyqb2g3emo" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_4.png" id="6_oqadk"]
+[ext_resource type="Texture2D" uid="uid://ckrkjtgj6ncub" path="res://Topdown Assets/Sprites/Entities/Enemy 3/fly_5.png" id="7_mibo2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m2om0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_oqadk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_mibo2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_m2om0")
+}],
+"loop": false,
+"name": &"dead",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_d405r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_44gae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_wwu2i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_y5qon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_oqadk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_mibo2")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d405r"]
+radius = 47.0
+height = 104.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y5qon"]
+radius = 150.0
+
+[node name="Enemy_3" instance=ExtResource("1_irhgu")]
+
+[node name="Shadow" parent="." index="0"]
+modulate = Color(1, 1, 1, 0.392157)
+position = Vector2(-1, 42)
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+position = Vector2(-2, -153)
+sprite_frames = SubResource("SpriteFrames_m2om0")
+animation = &"fly"
+autoplay = "fly"
+
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(-3, -50)
+shape = SubResource("CapsuleShape2D_d405r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea2D" index="0"]
+position = Vector2(0, -53)
+shape = SubResource("CircleShape2D_y5qon")
+
+[node name="HealthBar" parent="." index="5"]
+offset_top = -225.0
+offset_bottom = -225.0
