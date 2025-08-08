@@ -1,9 +1,6 @@
 # main_menu.gd
 extends Control
 
-@onready var transition_rect = $VBoxContainer/Panel/TransitionRect
-@onready var animation_player = $VBoxContainer/Panel/AnimationPlayer
-
 
 func _on_iniciar_juego_pressed():
 	# La ruta correcta es ahora a través de VBoxContainer

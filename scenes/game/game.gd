@@ -16,20 +16,24 @@ func _ready() -> void:
 	GameManager.player = player
 	wave_timer.start()
 
+	# Evitar doble conexión
+	if not enemy_spawner.on_wave_completed.is_connected(_on_enemy_spawner_on_wave_completed):
+		enemy_spawner.on_wave_completed.connect(_on_enemy_spawner_on_wave_completed)
+
 func _physics_process(delta: float) -> void:
 	camera.global_position = player.global_position
 	var target_pos := get_global_mouse_position()
-	crosshair.global_position = crosshair.global_position.lerp(target_pos, delta * 20.)
+	crosshair.global_position = crosshair.global_position.lerp(target_pos, delta * 20.0)
 	wave_label.text = "New wave in\n%d" % int(wave_timer.time_left)
 	coins_label.text = str(GameManager.coins)
 	enemy_count_label.text = "Enemy: %s" % str(enemy_spawner.enemies_remainig)
 
-func _on_enemy_spawner_on_wave_completed() -> void:
+func _on_enemy_spawner_on_wave_completed(wave_number: int) -> void:
+	# Solo seguimos indefinidamente
 	weapons.show()
 	wave_label.show()
 	enemy_count_label.hide()
 	wave_timer.start()
-
 
 func _on_wave_timer_timeout() -> void:
 	weapons.hide()
