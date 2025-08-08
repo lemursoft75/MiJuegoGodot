@@ -1,9 +1,10 @@
+res://scenes
+res://Topdown Assets/Images
 res://scenes/extra
 res://scenes/enemy
 res://scenes/managers
 res://scenes/components
 res://scenes/bullet
-res://scenes
 res://scenes/player
 res://autoloads
 res://

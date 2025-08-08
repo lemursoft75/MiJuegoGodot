@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://vm7amrumnfm7"
+path="res://.godot/imported/menu.mp3-207bdfae317ac23b6522a5749928b82e.mp3str"
+
+[deps]
+
+source_file="res://Topdown Assets/Sound/menu.mp3"
+dest_files=["res://.godot/imported/menu.mp3-207bdfae317ac23b6522a5749928b82e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
