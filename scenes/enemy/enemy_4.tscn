@@ -98,7 +98,6 @@ height = 234.0
 [node name="Enemy_4" instance=ExtResource("1_4quln")]
 
 [node name="Shadow" parent="." index="0"]
-modulate = Color(1, 1, 1, 0.392157)
 position = Vector2(0, 6)
 
 [node name="AnimatedSprite2D" parent="." index="1"]

@@ -97,7 +97,6 @@ radius = 121.037
 [node name="Enemy_1" instance=ExtResource("1_d8iib")]
 
 [node name="Shadow" parent="." index="0"]
-modulate = Color(1, 1, 1, 0.392157)
 position = Vector2(0, 5)
 
 [node name="AnimatedSprite2D" parent="." index="1"]
