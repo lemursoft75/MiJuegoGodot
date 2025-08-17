@@ -83,10 +83,13 @@ func _on_enemy_died() -> void:
 
 		# 📌 Si la próxima oleada es el jefe
 		if wave_number + 1 == boss_wave:
-			on_boss_incoming.emit()   # 🔥 Avisar al HUD ANTES de spawnear al jefe
-			# Aquí NO spawneamos al jefe todavía
+			on_boss_incoming.emit()   # 🔥 Avisar al HUD
 			wave_number += 1
-			boss_spawned = false # se mantiene falso hasta que toque spawnear
+			boss_spawned = false
+			
+			# ⏳ Espera 3 seg para que se muestre el mensaje
+			await get_tree().create_timer(3.0).timeout
+			_spawn_boss()  # 👈 Aquí aparece el jefe
 			return
 
 		# 📌 Si no es jefe, seguimos normal
@@ -95,6 +98,7 @@ func _on_enemy_died() -> void:
 			enemies_per_wave += 2
 			enemies_remainig = enemies_per_wave
 			spawned_enemies = 0
+
 
 # --------------------------------------------------------
 # Boss
