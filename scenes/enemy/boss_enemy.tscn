@@ -96,7 +96,7 @@ radius = 150.0
 height = 300.0
 
 [node name="Enemy_4" instance=ExtResource("1_lncrt")]
-move_speed = 200.0
+move_speed = 600.0
 attack_damage = 5
 
 [node name="Shadow" parent="." index="0"]

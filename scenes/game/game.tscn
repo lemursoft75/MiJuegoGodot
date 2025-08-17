@@ -24,7 +24,7 @@ size = Vector2(6144, 40)
 
 [sub_resource type="LabelSettings" id="LabelSettings_uyinl"]
 font = ExtResource("15_3xj4h")
-font_size = 100
+font_size = 60
 
 [sub_resource type="LabelSettings" id="LabelSettings_10c2w"]
 font = ExtResource("15_3xj4h")

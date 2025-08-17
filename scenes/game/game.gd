@@ -11,6 +11,8 @@ class_name Game
 @onready var coins_label: Label = %CoinsLabel
 @onready var wave_timer: Timer = $WaveTimer
 
+var boss_fight := false   # 👉 flag de jefe
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	GameManager.player = player
@@ -19,7 +21,6 @@ func _ready() -> void:
 	if not enemy_spawner.on_wave_completed.is_connected(_on_enemy_spawner_on_wave_completed):
 		enemy_spawner.on_wave_completed.connect(_on_enemy_spawner_on_wave_completed)
 
-	# 📌 Conectar señal del jefe
 	if not enemy_spawner.on_boss_incoming.is_connected(_on_boss_incoming):
 		enemy_spawner.on_boss_incoming.connect(_on_boss_incoming)
 
@@ -28,25 +29,18 @@ func _physics_process(delta: float) -> void:
 	var target_pos := get_global_mouse_position()
 	crosshair.global_position = crosshair.global_position.lerp(target_pos, delta * 20.0)
 
-	if not enemy_spawner.boss_spawned:
-		wave_label.text = "Vienen diablillos en\n%d" % int(wave_timer.time_left)
+	# 👉 Solo mostrar diablillos si no es boss fight
+	if not enemy_spawner.boss_spawned and not boss_fight:
+		wave_label.text = "Vienen diablillos en:\n%d" % int(wave_timer.time_left)
 		enemy_count_label.text = "Diablillos: %s" % str(enemy_spawner.enemies_remainig)
-	else:
-		# 🔥 Ocultar textos durante pelea con el jefe
-		wave_label.hide()
-		enemy_count_label.hide()
 
 	coins_label.text = str(GameManager.coins)
 
 func _on_enemy_spawner_on_wave_completed(wave_number: int) -> void:
-	if wave_number == enemy_spawner.boss_wave:
-		wave_label.text = "¡El jefe final llegó!"
-		wave_label.show()
-	else:
-		weapons.show()
-		wave_label.show()
-		enemy_count_label.hide()
-		wave_timer.start()
+	weapons.show()
+	wave_label.show()
+	enemy_count_label.hide()
+	wave_timer.start()
 
 func _on_wave_timer_timeout() -> void:
 	weapons.hide()
@@ -54,13 +48,14 @@ func _on_wave_timer_timeout() -> void:
 	enemy_count_label.show()
 	enemy_spawner.start_enemy_timer()
 
-# 📌 Nuevo: mensaje de jefe
+# 📌 Aviso de jefe final (solo 3 seg)
 func _on_boss_incoming() -> void:
+	boss_fight = true   # 👉 activar flag para que no se pise el mensaje
+
 	wave_label.text = "¡EL JEFE FINAL LLEGÓ!"
 	wave_label.show()
 	enemy_count_label.hide()
 	wave_timer.stop()
 
-	# 🔥 Ocultar después de 3 segundos
 	await get_tree().create_timer(3.0).timeout
-	wave_label.hide()
+	wave_label.hide()   # 👈 se oculta después de 3 segundos

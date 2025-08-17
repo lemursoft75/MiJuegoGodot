@@ -26,6 +26,9 @@ var enemies_remainig: int
 var spawned_enemies: int
 var wave_number: int = 1
 var boss_spawned := false
+var boss_incoming_emitted := false
+var boss_defeated := false   # 👈 NUEVO
+
 
 func _ready() -> void:
 	GameManager.on_enemy_died.connect(_on_enemy_died)
@@ -75,21 +78,24 @@ func _on_timer_timeout() -> void:
 # Oleadas normales
 # --------------------------------------------------------
 func _on_enemy_died() -> void:
+	if boss_defeated:   # 👈 Si el jefe ya murió, ignorar
+		return
+
 	enemies_remainig -= 1
 	if enemies_remainig <= 0:
 		timer.stop()
 		GameManager.set_checkpoint(wave_number, boss_wave)
 		on_wave_completed.emit(wave_number)
 
-		# 📌 Si la próxima oleada es el jefe
-		if wave_number + 1 == boss_wave:
-			on_boss_incoming.emit()   # 🔥 Avisar al HUD
+		# 📌 Si la próxima oleada es el jefe y aún no lo hemos anunciado
+		if wave_number + 1 == boss_wave and not boss_incoming_emitted:
+			boss_incoming_emitted = true
+			on_boss_incoming.emit()
 			wave_number += 1
 			boss_spawned = false
-			
-			# ⏳ Espera 3 seg para que se muestre el mensaje
+
 			await get_tree().create_timer(3.0).timeout
-			_spawn_boss()  # 👈 Aquí aparece el jefe
+			_spawn_boss()
 			return
 
 		# 📌 Si no es jefe, seguimos normal
@@ -119,10 +125,8 @@ func _spawn_boss() -> void:
 
 func _on_boss_defeated() -> void:
 	print("¡Jefe derrotado!")
+	boss_defeated = true   # 👈 Con esto ya no vuelve a entrar en _on_enemy_died
 
-	# Esperar animación de muerte del jefe (2s)
 	await get_tree().create_timer(2.0).timeout  
-
-	# Luego mostrar popup de victoria
 	var popup = preload("res://scenes/ui/victory_popup.tscn").instantiate()
 	get_tree().current_scene.add_child(popup)
