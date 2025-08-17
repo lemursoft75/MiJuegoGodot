@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://drf4py1fgs3k2"]
+
+[ext_resource type="Script" uid="uid://c3rhjbuy26aqg" path="res://scenes/ui/continue_popup.gd" id="1_hlssx"]
+[ext_resource type="FontFile" uid="uid://bgagfu5e1ecxd" path="res://Topdown Assets/Fonts/Bake Soda.otf" id="2_5a080"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_hlssx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.219608)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -27.5
+offset_right = 80.0
+offset_bottom = 27.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_5a080")
+theme_override_font_sizes/font_size = 50
+text = "¿Continuar?"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="BtnContinue" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+process_mode = 2
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_5a080")
+theme_override_font_sizes/font_size = 30
+text = "Continuar
+"
+
+[node name="BtnExit" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+process_mode = 2
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_5a080")
+theme_override_font_sizes/font_size = 30
+text = "Salir"

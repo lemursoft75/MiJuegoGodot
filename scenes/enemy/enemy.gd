@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name Enemy
 
 @export var move_speed := 400.0
+@export var attack_damage := 2   # daño base del enemigo
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_component: HealthComponent = $HealthComponent
@@ -48,5 +49,5 @@ func _on_health_component_on_defeated() -> void:
 
 
 func _on_hit_area_2d_body_entered(player: Player) -> void:
-	player.health_component.take_damage(2)
-	GameManager.play_damage_text(player.global_position, 2)
+	player.health_component.take_damage(attack_damage)
+	GameManager.play_damage_text(player.global_position, attack_damage)

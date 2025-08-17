@@ -16,27 +16,51 @@ func _ready() -> void:
 	GameManager.player = player
 	wave_timer.start()
 
-	# Evitar doble conexión
 	if not enemy_spawner.on_wave_completed.is_connected(_on_enemy_spawner_on_wave_completed):
 		enemy_spawner.on_wave_completed.connect(_on_enemy_spawner_on_wave_completed)
+
+	# 📌 Conectar señal del jefe
+	if not enemy_spawner.on_boss_incoming.is_connected(_on_boss_incoming):
+		enemy_spawner.on_boss_incoming.connect(_on_boss_incoming)
 
 func _physics_process(delta: float) -> void:
 	camera.global_position = player.global_position
 	var target_pos := get_global_mouse_position()
 	crosshair.global_position = crosshair.global_position.lerp(target_pos, delta * 20.0)
-	wave_label.text = "New wave in\n%d" % int(wave_timer.time_left)
+
+	if not enemy_spawner.boss_spawned:
+		wave_label.text = "Vienen diablillos en\n%d" % int(wave_timer.time_left)
+		enemy_count_label.text = "Diablillos: %s" % str(enemy_spawner.enemies_remainig)
+	else:
+		# 🔥 Ocultar textos durante pelea con el jefe
+		wave_label.hide()
+		enemy_count_label.hide()
+
 	coins_label.text = str(GameManager.coins)
-	enemy_count_label.text = "Enemy: %s" % str(enemy_spawner.enemies_remainig)
 
 func _on_enemy_spawner_on_wave_completed(wave_number: int) -> void:
-	# Solo seguimos indefinidamente
-	weapons.show()
-	wave_label.show()
-	enemy_count_label.hide()
-	wave_timer.start()
+	if wave_number == enemy_spawner.boss_wave:
+		wave_label.text = "¡El jefe final llegó!"
+		wave_label.show()
+	else:
+		weapons.show()
+		wave_label.show()
+		enemy_count_label.hide()
+		wave_timer.start()
 
 func _on_wave_timer_timeout() -> void:
 	weapons.hide()
 	wave_label.hide()
 	enemy_count_label.show()
 	enemy_spawner.start_enemy_timer()
+
+# 📌 Nuevo: mensaje de jefe
+func _on_boss_incoming() -> void:
+	wave_label.text = "¡EL JEFE FINAL LLEGÓ!"
+	wave_label.show()
+	enemy_count_label.hide()
+	wave_timer.stop()
+
+	# 🔥 Ocultar después de 3 segundos
+	await get_tree().create_timer(3.0).timeout
+	wave_label.hide()

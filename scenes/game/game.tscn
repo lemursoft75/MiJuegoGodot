@@ -173,8 +173,7 @@ offset_top = 20.0
 offset_right = 263.5
 offset_bottom = 265.0
 grow_horizontal = 2
-text = "NEW WAVE
-IN"
+text = "VIENEN DIABLILLOS:"
 label_settings = SubResource("LabelSettings_uyinl")
 horizontal_alignment = 1
 
@@ -190,7 +189,7 @@ offset_top = 20.0
 offset_right = 263.5
 offset_bottom = 265.0
 grow_horizontal = 2
-text = "Enemy: 5"
+text = "Diablillos: 5"
 label_settings = SubResource("LabelSettings_uyinl")
 horizontal_alignment = 1
 
